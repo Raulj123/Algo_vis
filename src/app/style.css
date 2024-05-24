@@ -1,5 +1,7 @@
-.box {
-  
-  height: 10px;
-  background-color: beige;
+.algo {
+  font-size: 15px;
+  background-color: #d6ebe9;
+  padding: 3px;
+  font-weight: bold;
+  color: black;
 }
