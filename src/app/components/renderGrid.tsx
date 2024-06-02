@@ -4,7 +4,24 @@ import { matrix, startRow, startCol, endRow, endCol } from "./grid";
 import PathFinder from "./pathFinder";
 import { useState } from "react";
 
+import { usePathname } from "next/navigation";
+import React, {useEffect } from "react";
+
+
 export default function Grid() {
+
+  const [currPage, setCurrPage] = useState<string>("");
+  const pathName = usePathname()
+
+  useEffect(() => {
+    setCurrPage(pathName);
+  }, [pathName]);
+
+  const pages = ["/", "/bfs", "/Astar"];
+  const currPageIndex = pages.indexOf(currPage);
+
+  
+
   const [pathTaken, setPathTaken] = useState<boolean[][]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -14,7 +31,14 @@ export default function Grid() {
     );
     setIsLoading(true);
     const path = new PathFinder(matrix, startRow, startCol, endRow, endCol);
-    console.log(path);
+    
+    if (currPage == '/') {
+      path.dfs(path.startCol, path.startRow);
+      console.log("called dfs");
+    } else if (currPage == '/bfs') {
+      path.bfs(path.startRow, path.startCol);
+      console.log("called bfs");
+    }
 
     let i = 0;
     const timer = setInterval(() => {
@@ -26,7 +50,7 @@ export default function Grid() {
       setPathTaken(path.mark.slice(0, i + 1));
       setIsLoading(false);
       i++;
-    }, 500);
+    }, 90);
   }
   return (
     <>

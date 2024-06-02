@@ -27,57 +27,100 @@ class PathFinder {
     this.startCol = startCol;
     this.endRow = endRow;
     this.endCol = endCol;
-    this.dfs(startRow, startCol);
+    
   }
 
-  isValid(mark: boolean[][], row: number, col: number) {
+  isValid(mark: boolean[][], col: number, row: number) {
     if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) {
       return false;
     }
-    if (mark[row][col]) {
+    if (mark[col][row]) {
       return false;
     }
-    if (this.matrix[row][col] == 2) {
+    if (this.matrix[col][row] == 2) {
       return false;
     }
     return true;
   }
 
-  dfs(row: number, col: number): boolean {
+  dfs(col: number, row: number): boolean {
     var stack = [];
-    stack.push([row, col]);
+    stack.push([col, row]);
 
     while (stack.length != 0) {
+      console.log(stack)
       var curr = stack[stack.length - 1];
+      
       stack.pop();
-      var row = curr[0];
-      var col = curr[1];
-      console.log(row, col);
+      var col = curr[0];
+      var row = curr[1];
+      
       if (row == this.endRow && col == this.endCol) {
         break;
       }
 
-      if (!this.isValid(this.mark, row, col)) {
+      if (!this.isValid(this.mark, col, row)) {
         continue;
       }
 
-      this.mark[row][col] = true;
-
+      this.mark[col][row] = true;
+      
+      console.log(col, row)
       const dir = [
-        [-1, 0],
-        [1, 0],
-        [0, 1],
         [0, -1],
+        [1, 0],
+        [-1, 0],
+        [0, 1],
       ];
+    
 
-      for (const [dx, dy] of dir) {
+      for (const [dy, dx] of dir) {
         const newRow = row + dx;
         const newCol = col + dy;
-        stack.push([newRow, newCol]);
+        
+        if (this.isValid(this.mark, newCol, newRow)) {
+          stack.push([newCol, newRow]);
+        }
+        
       }
     }
-    this.mark[row][col] = true;
+    this.mark[col][row] = true;
     return true;
+  }
+
+  bfs(row:number, col:number): boolean {
+    var queue = []
+    this.mark[row][col] = true;
+    queue.push([row,col])
+    
+    const dir = [
+      [-1, 0],
+      [1, 0],
+      [0, 1],
+      [0, -1],
+    ];
+
+    while(queue.length !=0){
+      const [currR, currC] = queue.shift()!;
+
+      if (currR == this.endRow && currC == this.endCol) {
+        break;
+      }
+
+      
+
+      for(const [dx,dy] of dir){
+        const newR: number = currR + dx;
+        const newC: number = currC + dy;
+
+        if(this.isValid(this.mark, newR, newC)){
+          this.mark[newR][newC] = true;
+          queue.push([newR, newC]);
+        }
+      }
+    }
+    
+    return true
   }
 }
 

@@ -16,8 +16,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
   const pages = ["/", "/bfs", "/Astar"];
   const currPageIndex = pages.indexOf(currPage);
 
-  console.log(currPage);
-  console.log(currPageIndex);
+  
   
   return (
     <>
