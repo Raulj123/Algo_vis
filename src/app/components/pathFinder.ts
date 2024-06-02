@@ -102,7 +102,7 @@ class PathFinder {
 
     while(queue.length !=0){
       const [currR, currC] = queue.shift()!;
-
+      this.mark[currR][currC] = true;
       if (currR == this.endRow && currC == this.endCol) {
         break;
       }
@@ -114,7 +114,7 @@ class PathFinder {
         const newC: number = currC + dy;
 
         if(this.isValid(this.mark, newR, newC)){
-          this.mark[newR][newC] = true;
+          
           queue.push([newR, newC]);
         }
       }
